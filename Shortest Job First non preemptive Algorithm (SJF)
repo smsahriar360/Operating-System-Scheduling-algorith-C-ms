@@ -1,0 +1,79 @@
+/*==================================================
+ Short JOb First (SJF) Scheduling Algorithm
+ @author : S.M SahriAr FaiSal (5B ECSE 224)
+ ===================================================*/
+
+#include<iostream> //Input Output Stream. header file used in c++
+#include<conio.h>   //Console input and output. header file used in c / c++
+
+/*temp = Temporary Variable,
+p = position,
+bt = Burst time,
+time_quantum= Quantum time,
+tat = Turn around time,
+wt = Waiting time*/
+
+using namespace std;    // Standard
+
+int main()  //Main Function. Compiler program read start hear.
+{
+    int i,j,n,temp,pos,total=0,bt[20],wt[20],tat[20],p[20]; //Declare Some Int type variable and array.
+    float avgwt=0,avgtat=0;  //Declare Float Type variable and initial Primary value 0.
+    cout<<"Enter total number of processes(maximum 20):";    //Print a message console panel to get the total number of processes maximum of 20 processes.
+    cin>>n; //Get input value and set the value in n variable.
+
+    cout<<"\nEnter Process Burst Time\n";   //Print a message console panel.
+    for(i=0;i<n;i++)    //For loop Condition for input all process bus time. iteration start i = 0, end before i<n, and every iteration incremented i++.
+    {
+        cout<<"P["<<i+1<<"]:";  //Print a message console panel that's show Process Number
+        cin>>bt[i]; //Get input all process bus time and set the value in bt[i] array.
+    }
+    //Sorting of burst times
+    for(i=0;i<n;i++)    //For loop Condition for sorting burst time. iteration start i = 0, end before i<n, and every iteration incremented i++.
+    {
+        pos=i;  //put the value i in position(pos) variable.
+        for(j=i+1;j<n;j++)  //Nested For loop Condition for sorting burst time bt[j]. iteration start j = i+1, end before j<n, and every iteration incremented j++.
+        {
+            if(bt[j]<bt[pos])   //If condition for bt[j] less than bt[pos] then
+                pos=j;  // pass the value j in position(pos) variable.
+        }
+
+        //swapping
+        temp=bt[i]; //put the value bt[i] in temp variable.
+        bt[i]=bt[pos];  //pass the value bt[pos] to bt[i].
+        bt[pos]=temp;   //then pass the value temp to bt[pos] array
+
+        temp = p[i];    //put the value p[i] in temp variable.
+        p[i]=p[pos];    //pass the value p[pos] to p[i].
+        p[pos]=temp;    //then pass the value temp to p[pos] array
+    }
+
+    wt[0]=0;//waiting time for first process is 0
+
+    //Calculating waiting time
+    for(i=1;i<n;i++)     //For loop Condition for calculating waiting time. iteration start i = 1, end before i<n, and every iteration incremented i++.
+    {
+        wt[i]=0;     //Initial waiting time for wt[i] process is 0.
+        for(j=0;j<i;j++)    //Nested For loop Condition for bus time bt[j]. iteration start j = 0, end before j<i, and every iteration incremented j++.
+            wt[i]+=bt[j];   //Calculation Waiting time wt[i] = wt[i] + bt[i] and put the result to the wt[i] array.
+    }
+
+    cout<<"\nProcess\t\tBurst Time\tWaiting Time\tTurnaround Time"; //Print a message console panel.
+
+    //Calculating turnaround time
+    for(i=0;i<n;i++)    //For loop Condition for calculating turnaround time. iteration start i = 1, end before i<n, and every iteration incremented i++.
+    {
+        tat[i]=bt[i]+wt[i]; //calculating turnaround time. tat[i] = bt[i] + wt[i] and put the result to the tat[i] array.
+        avgwt=avgwt+wt[i];  //calculating total waiting time. avgwt = avgwt + wt[i] and put the result to the avgwt variable.
+        avgtat=avgtat+tat[i];   //calculating total turnaround time. avgtat = avgtat + tat[i] and put the result to the avgtat variable.
+        cout<<"\nP["<<i+1<<"]"<<"\t\t"<<bt[i]<<"\t\t"<<wt[i]<<"\t\t"<<tat[i];   //Print process no, process bus time, process waiting time, process turnaround time in the console panel.
+    }
+
+    avgwt=avgwt/i;   //calculating average waiting time avgwt = avgwt/i. and put the result to the avgwt variable.
+    avgtat=avgtat/i;    //calculating average turnaround time avgtat = avgtat/i. and put the result to the avgtat variable.
+
+    cout<<"\n\nAverage Waiting Time:"<<avgwt;    //print a massage with average waiting time in console panel.
+    cout<<"\n\nAverage Turnaround Time:"<<avgtat;    //print a massage with average turnaround time in console panel.
+
+    getch();    //getch() function is holds the output screen until we press any key from the keyboard.
+}
