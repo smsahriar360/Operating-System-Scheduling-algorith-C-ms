@@ -1,0 +1,110 @@
+/*==================================================
+ Page Replacement Algorithms (FIFO)
+ @author : S.M SahriAr FaiSal (5B ECSE 224)
+ ===================================================*/
+#include<bits/stdc++.h> //
+#include<conio.h>   //Console input and output. header file used in c / c++
+
+/*p = no of page,
+hi = page hit,
+*/
+
+using namespace std;    // Standard.
+
+int main()  //Main Function. Compiler program read start hear.
+{
+    int n,m,i,j,k,hit=0; //Declare Some Int type variable.
+
+    cout<<"Enter number of frames\n";   //Print a message console panel to get the total number of frames.
+    cin>>n; //Get input value and set the value in n variable.
+
+    cout<<"Enter number of processes\n";    //Print a message console panel to get the total number of processes.
+    cin>>m; //Get input value and set the value in m variable.
+
+    //dynamic array declaration using vector method of (STL)
+	//STL standard template library of C++
+    vector<int> p(m);
+    vector<int> hi(m);
+
+    cout<<"Enter processes\n";  //Print a message console panel.
+
+    for(i=0;i<m;i++){   //For loop Condition for input all process. iteration start i = 0, end before i<m, and every iteration incremented i++.
+        cin>>p[i];  //get input all processes and set the value p[i]
+    }
+    vector<vector<int>> a(n);   //dynamic array declaration using vector method of (STL)
+
+    for(i=0;i<n;i++){   //For loop condition. iteration start i = 0, end before i<m, and every iteration incremented i++.
+        a[i]=vector<int>(m,-1); //put the result a[i] array.
+    }
+    map <int, int> mp;  //dynamic array declaration using vector method of (STL).
+    for(i=0;i<m;i++){   //For loop condition. iteration start i = 0, end before i<m, and every iteration incremented i++.
+        vector<pair<int,int>> c;    //dynamic array declaration using vector method of (STL).
+        for(auto q: mp){    //For loop condition. iteration start i = 0, end before i<m, and every iteration incremented i++.
+            c.push_back({q.second,q.first});    //Dot operator
+        }
+        sort(c.begin(),c.end());    //
+        bool hasrun=false;  //declare boolean type variable hasrun and pass the value false.
+        for(j=0;j<n;j++){   //For loop condition. iteration start i = 0, end before i<m, and every iteration incremented i++.
+            if(a[j][i]==p[i]){  //if condition a[j][i] equal p[i].
+                hit++;  //increment ++.
+                hi[i]=1;    //set the value hi[i] = 1.
+                mp[p[i]]++; //increment ++.
+                hasrun=true;    //hasrun variable pass the value true.
+                break;  // break.
+            }
+            if(a[j][i]==-1){    //if condition a[j][i] equal -1.
+                for(k=i;k<m;k++)    //For loop condition. iteration start k = i, end before k<m, and every iteration incremented k++.
+                    a[j][k]=p[i];   //a[j][k] = p[i].
+                mp[p[i]]++; //increment ++.
+                hasrun=true;    //hasrun variable pass the value true.
+                break;  // break
+            }
+        }
+        if(j==n||hasrun==false){    //if condition j equal n
+            for(j=0;j<n;j++){   ////For loop condition. iteration start j = 0, end before j<n, and every iteration incremented j++.
+                if(a[j][i]==c[c.size()-1].second){  //a[j][i] equal c[c.size()-1].second
+                    mp.erase(a[j][i]);  //Dot operator erase(a[j][i])
+                    for(k=i;k<m;k++)    //for loop condition. iteration start k = i, end before k < m, and every iteration incremented k++.
+                        a[j][k]=p[i];   //a[j][k] equal
+                    mp[p[i]]++; //Increment ++
+                    break;  //break
+                }
+            }
+        }
+        for(auto q:mp){ //For loop condition. auto
+            if(q.first!=p[i]){  //if condition q.first!=p[i]
+                mp[q.first]++;  //access first u
+            }
+        }
+    }
+
+    cout<<"Process ";   //print process console panel.
+    for(i=0;i<m;i++){   //For loop condition. iteration start i = 0, end before i<m, and every iteration incremented i++.
+        cout<<p[i]<<" ";    //print p[i] with white space console panel.
+    }
+
+    cout<<'\n'; //Print a new line console panel
+
+    for(i=0;i<n;i++){   //For loop condition. iteration start i = 0, end before i<m, and every iteration incremented i++.
+        cout<<"Frame "<<i<<" "; //print frame with white space.
+        for(j=0;j<m;j++){   //For loop condition. iteration start j = 0, end before j<m, and every iteration incremented j++.
+            if(a[i][j]==-1) //if condition a[i][j] equal -1.
+                cout<<"E "; //print E console panel.
+                else    //else
+            cout<<a[i][j]<<" "; //print a[i] [j] with white space console panel.
+        }
+        cout<<'\n'; //print new line
+    }
+
+    for(i=0;i<m;i++){   //For loop Condition for processes hit. iteration start time= 0, end before i < m, and every iteration increment i++.
+        if(hi[i]==0)    //if condition hi[i] equal 0 then
+        cout<<"  "; //Print white space
+        else    //else
+        cout<<hi[i]<<" ";   //print number of hit with space console panel.
+    }
+
+    cout<<"\n"; //Print a new line console panel
+    cout<<"Hit "<<hit<<'\n'<<"Page Fault "<<m-hit<<'\n';    //Print a message and show the result console panel
+
+    getch();    //getch() function is holds the output screen until we press any key from the keyboard.
+}
